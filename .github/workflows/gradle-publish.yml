@@ -23,7 +23,7 @@ jobs:
               run: chmod +x gradlew
 
             - name: Publish Package
-              run: ./gradlew publish -PtargetJvmPlatform=macos
+              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=macos
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
               run: chmod +x gradlew
 
             - name: Publish Package
-              run: ./gradlew publish -PtargetJvmPlatform=linux
+              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=linux
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
               run: chmod +x gradlew
 
             - name: Publish Package
-              run: ./gradlew publish -PtargetJvmPlatform=linux
+              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=mingw
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
