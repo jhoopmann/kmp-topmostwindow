@@ -1,1 +1,1 @@
-rootProject.name = "lib"
+rootProject.name = "kmp-topmostwindow"

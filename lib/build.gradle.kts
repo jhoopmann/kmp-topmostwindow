@@ -14,14 +14,13 @@ version = "1.0.0"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    `java-library`
-    `maven-publish`
+    id("maven-publish")
 }
 
 publishing {
     repositories {
         maven {
-            name = "github-kmp-topmostwindow"
+            name = "Github"
             url = uri("https://maven.pkg.github.com/jhoopmann/kmp-topmostwindow")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
@@ -29,12 +28,21 @@ publishing {
             }
         }
     }
+
     publications {
-        create<MavenPublication>("github-kmp-topmostwindow") {
-            from(components["java"])
+        create<MavenPublication>("targetJvmPlatform") {
             groupId = "de.jhoopmann.topmostwindow.awt"
-            artifactId = "kmp-topmostwindow"
+            artifactId = "kmp-topmostwindow-$targetJvmPlatform"
             version = "1.0.0"
+
+            afterEvaluate {
+                artifact(tasks.getByName("${targetJvmPlatform}Jar")) {
+                    classifier = null
+                }
+                artifact(tasks.getByName("allMetadataJar")) {
+                    classifier = "metadata"
+                }
+            }
         }
     }
 }
