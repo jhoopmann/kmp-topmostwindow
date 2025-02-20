@@ -23,6 +23,9 @@ publishing {
             name = "Github"
             url = uri("https://maven.pkg.github.com/jhoopmann/kmp-topmostwindow")
             credentials {
+                println(System.getenv("GITHUB_ACTOR"))
+                println(System.getenv("GITHUB_TOKEN"))
+
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
