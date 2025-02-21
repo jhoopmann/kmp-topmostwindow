@@ -8,18 +8,20 @@ on:
 jobs:
     platform_matrix:
         strategy:
+            max-parallel: 1
             matrix:
                 system_image:
-                    - macos-14-xlarge
                     - ubuntu-24.04
                     - windows-2022
+                    - macos-14-xlarge
                 include:
                     - system_image: macos-14-xlarge
                       system_architecture: aarch64
-                    - system_image:
-                          - ubuntu-24.04
-                          - windows-2022
+                    - system_image: ubuntu-24.04
                       system_architecture: x64
+                    - system_image: windows-2022
+                      system_architecture: x64
+                      
         runs-on: ${{ matrix.system_image }}
         steps:
             - name: Checkout Repository
