@@ -17,10 +17,13 @@ jobs:
                 include:
                     - system_image: macos-14-xlarge
                       system_architecture: aarch64
+                      target_jvm_platform: macos
                     - system_image: ubuntu-24.04
                       system_architecture: x64
+                      target_jvm_platform: linux
                     - system_image: windows-2022
                       system_architecture: x64
+                      target_jvm_platform: mingw
                       
         runs-on: ${{ matrix.system_image }}
         steps:
@@ -38,7 +41,7 @@ jobs:
               run: chmod +x gradlew
 
             - name: Publish Package
-              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=macos
+              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=${{ target_jvm_platform }}
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.PUBLISHING_TOKEN }}
