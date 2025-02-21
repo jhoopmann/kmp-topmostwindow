@@ -28,6 +28,7 @@ jobs:
         runs-on: ${{ matrix.system_image }}
         steps:
             - name: "Install X11 Headers"
+              if: ${{ matrix.target_jvm_platform == "linux" }}
               run: sudo apt update && apt install -y libx11-dev
 
             - name: Checkout Repository
