@@ -6,8 +6,21 @@ on:
             - main
 
 jobs:
-    publish-macos-arm64:
-        runs-on: macos-14-xlarge
+    platform_matrix:
+        strategy:
+            matrix:
+                system_image:
+                    - macos-14-xlarge
+                    - ubuntu-24.04
+                    - windows-2022
+                include:
+                    - system_image: macos-14-xlarge
+                      system_architecture: aarch64
+                    - system_image:
+                          - ubuntu-24.04
+                          - windows-2022
+                      system_architecture: x64
+        runs-on: ${{ matrix.system_image }}
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v4
@@ -17,7 +30,7 @@ jobs:
               with:
                   distribution: oracle
                   java-version: "21"
-                  architecture: aarch64
+                  architecture: ${{ matrix.system_architecture }}
 
             - name: Grant execute permission for Gradle
               run: chmod +x gradlew
@@ -27,50 +40,4 @@ jobs:
               env:
                   GITHUB_ACTOR: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.PUBLISHING_TOKEN }}
-
-    publish-linux-x64:
-        runs-on: ubuntu-24.04
-        steps:
-            - name: Install X11 dev headers
-              run: sudo apt update && sudo apt install -y libx11-dev
-
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-
-            - name: Setup JDK
-              uses: actions/setup-java@4.7.0
-              with:
-                  distribution: oracle
-                  java-version: "21"
-                  architecture: x64
-
-            - name: Grant execute permission for Gradle
-              run: chmod +x gradlew
-
-            - name: Publish Package
-              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=linux
-              env:
-                  GITHUB_ACTOR: ${{ github.actor }}
-                  GITHUB_TOKEN: ${{ secrets.PUBLISHING_TOKEN }}
-
-    publish-windows-x64:
-        runs-on: windows-2022
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-
-            - name: Setup JDK
-              uses: actions/setup-java@4.7.0
-              with:
-                  distribution: oracle
-                  java-version: "21"
-                  architecture: x64
-
-            - name: Grant execute permission for Gradle
-              run: chmod +x gradlew
-
-            - name: Publish Package
-              run: ./gradlew publishTargetJvmPlatformPublicationToGithubRepository -PtargetJvmPlatform=mingw
-              env:
-                  GITHUB_ACTOR: ${{ github.actor }}
-                  GITHUB_TOKEN: ${{ secrets.PUBLISHING_TOKEN }}
+                  
