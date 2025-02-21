@@ -11,17 +11,17 @@ jobs:
             fail-fast: false
             matrix:
                 system_image:
-                    - ubuntu-24.04
-                    - windows-2022
-                    - macos-13-xlarge
+                    - ubuntu-latest
+                    - windows-latest
+                    - macos-latest
                 include:
-                    - system_image: macos-14-xlarge
+                    - system_image: macos-latest
                       system_architecture: aarch64
                       target_jvm_platform: macos
-                    - system_image: ubuntu-24.04
+                    - system_image: ubuntu-latest
                       system_architecture: x64
                       target_jvm_platform: linux
-                    - system_image: windows-2022
+                    - system_image: windows-latest
                       system_architecture: x64
                       target_jvm_platform: mingw
                       
