@@ -74,6 +74,8 @@ open class TopMostImpl() : TopMost {
                     findPlatformWindowHandle(window)
                 }
 
+            println(windowHandle)
+
             setPlatformOptionsInit()
         }
 

@@ -98,7 +98,7 @@ static bool setupWindowHook() {
 
 static HWND findComponentWindow(JNIEnv *env, jobject component) {
     jclass componentClass = env->GetObjectClass(component);
-    jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava.awt.peer.ComponentPeer");
+    jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava/awt/peer/ComponentPeer;");
     if (peerFieldID == nullptr) {
         std::cerr << "Failed to get ComponentPeer field" << std::endl;
         return nullptr;
@@ -135,7 +135,7 @@ extern "C" {
     }
 
     JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
-        HWND windowHandle = findWindowForComponent(component);
+        HWND windowHandle = findComponentWindow(env, component);
 
         return reinterpret_cast<jlong>(windowHandle);
     }

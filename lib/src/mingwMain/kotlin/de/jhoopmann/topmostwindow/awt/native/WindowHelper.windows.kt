@@ -12,13 +12,13 @@ actual class WindowHelper {
         System.load(NativeLibraryResolver("libwindow_helper.dll").path)
     }
 
-    actual external fun findLastWindow(): Long
-
     actual external fun setWindowTopMost(windowHandle: Long)
 
     actual external fun setWindowSticky(windowHandle: Long)
 
-    actual fun findWindowForComponent(component: Component): Long {
+    actual external fun findWindowForComponent(component: Component): Long
+
+    actual fun findLastWindow(): Long {
         throw NotImplementedError()
     }
 
