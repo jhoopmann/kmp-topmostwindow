@@ -1,14 +1,70 @@
 #include <jni.h>
+#include <jawt.h>
+#include <jawt_md.h>
 #include <dispatch/dispatch.h>
 #include <Cocoa/Cocoa.h>
 
 static JavaVM* jvm = nullptr;
 
+static JAWT getAwt(JNIEnv *env) {
+    JAWT awt;
+    awt.version = JAWT_VERSION_1_4 | JAWT_MACOSX_USE_CALAYER;
+
+    if (JAWT_GetAWT(env, &awt) == JNI_FALSE) {
+        NSLog(@"Failed to get AWT instance");
+        awt.version = -1;
+    }
+
+    return awt;
+}
+
+static NSWindow* getComponentWindow(JAWT* awt, JNIEnv* env, jobject component) {
+    jclass componentClass = env->GetObjectClass(component);
+    jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava/awt/peer/ComponentPeer;");
+    if (peerFieldID == nullptr) {
+        NSLog(@"Failed to get ComponentPeer field of component class");
+        return 0L;
+    }
+    jobject peer = env->GetObjectField(component, peerFieldID); // LWWindowPeer.java
+    if (peer == nullptr) {
+        NSLog(@"Failed to get ComponentPeer of component");
+        return 0L;
+    }
+
+    jclass peerClass = env->GetObjectClass(peer);
+    jfieldID platformWindowFieldID = env->GetFieldID(peerClass, "platformWindow", "Lsun/lwawt/PlatformWindow;");
+    if (platformWindowFieldID == nullptr) {
+        NSLog(@"Failed to get PlatformWindow field of ComponentPeer class");
+        return 0L;
+    }
+    jobject platformWindow = env->GetObjectField(peer, platformWindowFieldID); // LWWindowPeer.java
+    if (platformWindow == nullptr) {
+        NSLog(@"Failed to get PlatformWindow of ComponentPeer");
+        return 0L;
+    }
+
+    jclass platformWindowClass = env->GetObjectClass(platformWindow);
+    jclass retainedResourceClass = env->GetSuperclass(platformWindowClass);
+
+    jfieldID pointerFieldID = env->GetFieldID(retainedResourceClass, "ptr", "J");
+    if (pointerFieldID == NULL) {
+        NSLog(@"Failed to get Pointer field of PlatformWindow class");
+        return 0L;
+    }
+    jlong pointer = env->GetLongField(platformWindow, pointerFieldID); // LWWindowPeer.java
+    if (pointer <= 0L) {
+        NSLog(@"Failed to get Pointer of PlatformWindow");
+        return 0L;
+    }
+
+    return reinterpret_cast<NSWindow*>(pointer);
+}
+
 static NSString* jStringToNSString(JNIEnv *env, jstring text) {
     const jchar* textChars = env->GetStringChars(text, NULL);
     const int textLength = env->GetStringLength(text);
     NSString* textString =  [[NSString alloc] initWithCharacters:textChars length:textLength];
-    
+
     env->ReleaseStringChars(text, textChars);
     return textString;
 }
@@ -20,13 +76,13 @@ static NSWindow* findWindowForTitle(NSString* title) {
             return win;
         }
     }
-    
+
     return nil;
 }
 
 static NSWindow* findLastWindow() {
     NSArray<NSWindow*>* windows = [[NSApplication sharedApplication] orderedWindows];
-    
+
     return windows.lastObject;
 }
 
@@ -36,12 +92,23 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 
+JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+    JAWT awt = getAwt(env);
+    if (awt.version == -1) {
+        return 0L;
+    }
+
+    NSWindow* window = getComponentWindow(&awt, env, component);
+
+    return reinterpret_cast<jlong>(window);
+}
+
 JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findLastWindow(JNIEnv *env, jobject obj) {
     __block NSWindow* window = nil;
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         window = findLastWindow();
     });
-    
+
     return reinterpret_cast<jlong>(window);
 }
 
@@ -52,7 +119,7 @@ JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         window = findWindowForTitle(strTitle);
     });
-    
+
     [strTitle release];
     return reinterpret_cast<jlong>(window);
 }
@@ -61,7 +128,7 @@ JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_s
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSWindowLevel level = static_cast<NSWindowLevel>(windowLevel);
         NSWindow* window = (NSWindow*) windowHandle;
-        
+
         [window setLevel: level];
     });
 }
@@ -70,7 +137,7 @@ JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_s
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSWindowCollectionBehavior collectionBehavior = static_cast<NSWindowLevel>(windowCollectionBehavior);
         NSWindow* window = (NSWindow*) windowHandle;
-        
+
         [window setCollectionBehavior: collectionBehavior];
     });
 }

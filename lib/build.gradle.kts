@@ -61,7 +61,9 @@ kotlin {
 
     sourceSets {
         commonMain {
-
+            dependencies {
+                implementation(kotlin("reflect"))
+            }
         }
 
         macosMain {

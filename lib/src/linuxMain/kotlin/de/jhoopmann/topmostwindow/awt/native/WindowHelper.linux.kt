@@ -1,5 +1,7 @@
 package de.jhoopmann.topmostwindow.awt.native
 
+import java.awt.Component
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class WindowHelper {
     actual companion object {
@@ -13,6 +15,10 @@ actual class WindowHelper {
     actual external fun addWindowMode(windowHandle: Long, windowMode: Array<String>)
 
     actual external fun findWindowForName(windowName: String): Long
+
+    actual fun findWindowForComponent(component: Component): Long {
+        throw NotImplementedError()
+    }
 
     actual fun findLastWindow(): Long {
         throw NotImplementedError()

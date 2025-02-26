@@ -3,11 +3,6 @@
 #include <psapi.h>
 #include <iostream>
 
-struct WindowSearch {
-    DWORD processId;
-    HWND window;
-};
-
 static JavaVM* jvm = nullptr;
 
 static const char* taskbarWindowClassName = "Shell_TrayWnd";
@@ -61,21 +56,6 @@ static bool setWindowTopMostOptions(HWND window) {
            SetWindowPos(window, HWND_TOPMOST, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 }
 
-static BOOL CALLBACK WindowEnumeratorProc(HWND hwnd, LPARAM windowSearch) {
-    WindowSearch* search = reinterpret_cast<WindowSearch*>(windowSearch);
-
-    DWORD processId;
-    GetWindowThreadProcessId(hwnd, static_cast<LPDWORD>(&processId));
-
-    if (processId == search->processId) {
-		search->window = hwnd;
-
-    	return false;
-    }
-
-    return true;
-}
-
 static LRESULT CALLBACK windowHookProc(int code, WPARAM wParam, LPARAM lParam) {
     if (libWindow != nullptr) {
 		setWindowTopMostOptions(libWindow);
@@ -116,16 +96,36 @@ static bool setupWindowHook() {
     return true;
 }
 
-static HWND findLastWindow() {
-  	DWORD processId = GetCurrentProcessId();
-    WindowSearch windowSearch = { processId, nullptr };
+static HWND findComponentWindow(JNIEnv *env, jobject component) {
+    jclass componentClass = env->GetObjectClass(component);
+    jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava.awt.peer.ComponentPeer");
+    if (peerFieldID == nullptr) {
+        std::cerr << "Failed to get ComponentPeer field" << std::endl;
+        return nullptr;
+    }
 
-    EnumChildWindows(GetDesktopWindow(), WindowEnumeratorProc, reinterpret_cast<LPARAM>(&windowSearch));
-    if(windowSearch.window == nullptr) {
-    	std::cerr << "Failed to find last window" << std::endl;
-	}
+    jobject peer = env->GetObjectField(component, peerFieldID);
+    if (peer == nullptr) {
+        std::cerr << "Failed to get ComponentPeer" << std::endl;
+        return nullptr;
+    }
 
-    return windowSearch.window;
+    jclass peerClass = env->GetObjectClass(peer);
+    // WWindowPeer -> WPanelPeer -> WCanvasPeer -> WComponentPeer (hwnd)
+    jclass componentPeerClass = env->GetSuperclass(env->GetSuperclass(env->GetSuperclass(peerClass)));
+
+    jfieldID hwndFieldID = env->GetFieldID(componentPeerClass, "hwnd", "J");
+    if (hwndFieldID == nullptr) {
+        std::cerr << "Failed to get HWND field" << std::endl;
+        return nullptr;
+    }
+
+    jlong pointer = env->GetLongField(peer, hwndFieldID);
+    if (pointer <= 0L) {
+        std::cerr << "Failed to get HWND" << std::endl;
+    }
+
+    return reinterpret_cast<HWND>(pointer);
 }
 
 extern "C" {
@@ -134,8 +134,8 @@ extern "C" {
         return JNI_VERSION_1_6;
     }
 
-    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findLastWindow(JNIEnv *env, jobject obj) {
-        HWND windowHandle = findLastWindow();
+    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+        HWND windowHandle = findWindowForComponent(component);
 
         return reinterpret_cast<jlong>(windowHandle);
     }

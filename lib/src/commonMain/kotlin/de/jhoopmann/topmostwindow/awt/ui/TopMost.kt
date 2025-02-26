@@ -12,6 +12,7 @@ import de.jhoopmann.topmostwindow.awt.native.macos.CGWindowLevelKey
 import de.jhoopmann.topmostwindow.awt.native.macos.NSApplicationActivationPolicy
 import de.jhoopmann.topmostwindow.awt.native.macos.NSWindowCollectionBehavior
 import de.jhoopmann.topmostwindow.awt.native.platform
+import java.awt.Component
 
 /**
  * topMost (Natively sets Window above all other Windows)
@@ -42,7 +43,7 @@ open class TopMostImpl() : TopMost {
     protected open var options: TopMostOptions? = null
     protected open var windowHandle: Long? = null
 
-    protected val macOS: MacOSSpecific = MacOSSpecific()
+    protected open val macOS: MacOSSpecific = MacOSSpecific()
 
     override fun initialize(
         window: Window,
@@ -50,6 +51,10 @@ open class TopMostImpl() : TopMost {
         parentInitialize: (() -> Long?)?,
         initialized: ((Long?) -> Unit)?,
     ) {
+        window.addNotify()
+
+        println(WindowHelper.instance.findWindowForComponent(window as Component))
+
         window.apply {
             name = options.name
             isAlwaysOnTop = options.topMost
@@ -157,6 +162,7 @@ open class TopMostImpl() : TopMost {
                 }
 
                 if (options!!.sticky) {
+                    println("SET COLLECTION BEHAVIOUR TOP MOST CAN JOIN ALL SPACES")
                     setWindowCollectionBehavior(
                         handle,
                         NSWindowCollectionBehavior.NSWindowCollectionBehaviorCanJoinAllSpaces.value or
@@ -237,7 +243,7 @@ open class TopMostImpl() : TopMost {
         return with(WindowHelper.instance) {
             when (platform) {
                 Platform.Mac -> {
-                    findLastWindow()
+                    findWindowForComponent(window)
                 }
 
                 Platform.Linux -> {
@@ -248,7 +254,9 @@ open class TopMostImpl() : TopMost {
                     findLastWindow()
                 }
             }
-        }.takeIf { it > 0L } ?: run {
+        }.takeIf { it > 0L }.also {
+            println(it)
+        } ?: run {
             println("Failed to get window handle for $this:${window.name}")
 
             null
