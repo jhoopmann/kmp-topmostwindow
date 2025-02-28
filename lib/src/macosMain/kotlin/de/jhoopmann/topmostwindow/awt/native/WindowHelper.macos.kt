@@ -14,15 +14,19 @@ actual class WindowHelper {
 
     actual external fun findWindowForComponent(component: Component): Long
 
-    actual external fun findWindowForName(windowName: String): Long
-
-    actual external fun findLastWindow(): Long
-
     actual external fun setWindowLevel(windowHandle: Long, windowLevel: Int)
 
     actual external fun setWindowCollectionBehavior(windowHandle: Long, windowCollectionBehavior: Int)
 
     actual external fun getCGWindowLevelForKey(cGWindowLevelKeyValue: Int): Int
+
+    actual fun findWindowForName(windowName: String): Long {
+        throw NotImplementedError()
+    }
+
+    actual fun findLastWindow(): Long {
+        throw NotImplementedError()
+    }
 
     actual fun addWindowMode(windowHandle: Long, windowMode: Array<String>) {
         throw NotImplementedError()

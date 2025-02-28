@@ -103,27 +103,6 @@ JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_
     return reinterpret_cast<jlong>(window);
 }
 
-JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findLastWindow(JNIEnv *env, jobject obj) {
-    __block NSWindow* window = nil;
-    dispatch_async_and_wait(dispatch_get_main_queue(), ^{
-        window = findLastWindow();
-    });
-
-    return reinterpret_cast<jlong>(window);
-}
-
-JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForName(JNIEnv *env, jobject obj, jstring windowName) {
-    __block NSString* strTitle = jStringToNSString(env, windowName);
-
-    __block NSWindow* window = nil;
-    dispatch_async_and_wait(dispatch_get_main_queue(), ^{
-        window = findWindowForTitle(strTitle);
-    });
-
-    [strTitle release];
-    return reinterpret_cast<jlong>(window);
-}
-
 JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_setWindowLevel(JNIEnv *env, jobject obj, jlong windowHandle, jint windowLevel) {
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSWindowLevel level = static_cast<NSWindowLevel>(windowLevel);
