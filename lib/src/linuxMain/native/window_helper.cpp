@@ -170,7 +170,7 @@ static Window getComponentWindow(JNIEnv* env, jobject component) {
 
     // XWindow -> XBaseWindow implements getWindow(): Long
     jclass peerClass = env->GetSuperclass(env->GetObjectClass(peer));
-    jmethodID pointerMethodID = env->GetMethodID(peerClass, "getWindow", "()L");
+    jmethodID pointerMethodID = env->GetMethodID(peerClass, "getWindow", "()J");
     if (pointerMethodID == nullptr) {
         std::cerr << "Failed to get pointer method" << std::endl;
         return 0L;
