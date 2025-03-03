@@ -168,7 +168,8 @@ static Window getComponentWindow(JNIEnv* env, jobject component) {
         return 0L;
     }
 
-    jclass peerClass = env->GetObjectClass(peer);
+    // XWindow -> XBaseWindow implements getWindow(): Long
+    jclass peerClass = env->GetSuperclass(env->GetObjectClass(peer));
     jmethodID pointerMethodID = env->GetMethodID(peerClass, "getWindow", "()L");
     if (pointerMethodID == nullptr) {
         std::cerr << "Failed to get pointer method" << std::endl;
@@ -193,26 +194,6 @@ extern "C" {
     JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
         Window window = getComponentWindow(env, component);
 
-        return static_cast<jlong>(window);
-    }
-
-    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForName(JNIEnv *env, jobject obj, jstring windowName) {
-        const char* windowName_c = env->GetStringUTFChars(windowName, nullptr);
-        Window window = 0L;
-
-        Display* display = openDisplay();
-        if (display != nullptr) {
-            Window root = DefaultRootWindow(display);
-            window = findWindowForName(display, root, windowName_c);
-
-            if (window == 0L) {
-                std::cerr << "Failed to find window by name: " << windowName_c << std::endl;
-            }
-
-            XCloseDisplay(display);
-        }
-
-        env->ReleaseStringUTFChars(windowName, windowName_c);
         return static_cast<jlong>(window);
     }
 

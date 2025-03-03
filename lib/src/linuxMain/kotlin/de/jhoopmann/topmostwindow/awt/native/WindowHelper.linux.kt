@@ -14,9 +14,9 @@ actual class WindowHelper {
 
     actual external fun addWindowMode(windowHandle: Long, windowMode: Array<String>)
 
-    actual external fun findWindowForName(windowName: String): Long
+    actual external fun findWindowForComponent(component: Component): Long
 
-    actual fun findWindowForComponent(component: Component): Long {
+    actual fun findWindowForName(windowName: String): Long {
         throw NotImplementedError()
     }
 

@@ -243,19 +243,7 @@ open class TopMostImpl() : TopMost {
 
     protected open fun findPlatformWindowHandle(window: Window): Long? {
         return with(WindowHelper.instance) {
-            when (platform) {
-                Platform.Mac -> {
-                    findWindowForComponent(window)
-                }
-
-                Platform.Linux -> {
-                    findWindowForName(window.name)
-                }
-
-                Platform.Windows -> {
-                    findLastWindow()
-                }
-            }
+            findWindowForComponent(window) // implemented on each platform
         }.takeIf { it > 0L }.also {
             println(it)
         } ?: run {
