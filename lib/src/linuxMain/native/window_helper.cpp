@@ -159,20 +159,20 @@ static Window getComponentWindow(JNIEnv* env, jobject component) {
     jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava/awt/peer/ComponentPeer;");
     if (peerFieldID == nullptr) {
         std::cerr << "Failed to get ComponentPeer field" << std::endl;
-        return nullptr;
+        return 0L;
     }
 
     jobject peer = env->GetObjectField(component, peerFieldID);
     if (peer == nullptr) {
         std::cerr << "Failed to get ComponentPeer" << std::endl;
-        return nullptr;
+        return 0L;
     }
 
     jclass peerClass = env->GetObjectClass(peer);
     jmethodID pointerMethodID = env->GetMethodID(peerClass, "getWindow", "()L");
     if (pointerMethodID == nullptr) {
         std::cerr << "Failed to get pointer method" << std::endl;
-        return nullptr;
+        return 0L;
     }
 
     jlong pointer = env->CallLongMethod(peer, ponterMethodID);
