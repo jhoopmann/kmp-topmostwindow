@@ -154,10 +154,46 @@ static Display* openDisplay() {
     return display;
 }
 
+static Window getComponentWindow(JNIEnv* env, jobject component) {
+    jclass componentClass = env->GetObjectClass(component);
+    jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava/awt/peer/ComponentPeer;");
+    if (peerFieldID == nullptr) {
+        std::cerr << "Failed to get ComponentPeer field" << std::endl;
+        return nullptr;
+    }
+
+    jobject peer = env->GetObjectField(component, peerFieldID);
+    if (peer == nullptr) {
+        std::cerr << "Failed to get ComponentPeer" << std::endl;
+        return nullptr;
+    }
+
+    jclass peerClass = env->GetObjectClass(peer);
+    jmethodID pointerMethodID = env->GetMethodID(peerClass, "getWindow", "()L");
+    if (pointerMethodID == nullptr) {
+        std::cerr << "Failed to get pointer method" << std::endl;
+        return nullptr;
+    }
+
+    jlong pointer = env->CallLongMethod(peer, ponterMethodID);
+    if (pointer <= 0L) {
+        std::cerr << "Failed to get pointer" << std::endl;
+    }
+
+    return reinterpret_cast<Window>(pointer);
+}
+
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
         jvm = vm;
         return JNI_VERSION_1_6;
+    }
+
+
+    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+        Window window = getComponentWindow(env, component);
+
+        return reinterpret_cast<jlong>(window);
     }
 
     JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForName(JNIEnv *env, jobject obj, jstring windowName) {

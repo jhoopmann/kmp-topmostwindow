@@ -18,7 +18,7 @@ static JAWT getAwt(JNIEnv *env) {
     return awt;
 }
 
-static NSWindow* getComponentWindow(JAWT* awt, JNIEnv* env, jobject component) {
+static NSWindow* getComponentWindow(JNIEnv* env, jobject component) {
     jclass componentClass = env->GetObjectClass(component);
     jfieldID peerFieldID = env->GetFieldID(componentClass, "peer", "Ljava/awt/peer/ComponentPeer;");
     if (peerFieldID == nullptr) {
@@ -93,12 +93,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
 }
 
 JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
-    JAWT awt = getAwt(env);
-    if (awt.version == -1) {
-        return 0L;
-    }
-
-    NSWindow* window = getComponentWindow(&awt, env, component);
+    NSWindow* window = getComponentWindow(env, component);
 
     return reinterpret_cast<jlong>(window);
 }
