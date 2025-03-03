@@ -175,12 +175,12 @@ static Window getComponentWindow(JNIEnv* env, jobject component) {
         return 0L;
     }
 
-    jlong pointer = env->CallLongMethod(peer, ponterMethodID);
+    jlong pointer = env->CallLongMethod(peer, pointerMethodID);
     if (pointer <= 0L) {
         std::cerr << "Failed to get pointer" << std::endl;
     }
 
-    return reinterpret_cast<Window>(pointer);
+    return static_cast<Window>(pointer);
 }
 
 extern "C" {
@@ -193,7 +193,7 @@ extern "C" {
     JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
         Window window = getComponentWindow(env, component);
 
-        return reinterpret_cast<jlong>(window);
+        return static_cast<jlong>(window);
     }
 
     JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForName(JNIEnv *env, jobject obj, jstring windowName) {
