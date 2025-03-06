@@ -23,36 +23,40 @@ abstract class TopMostBase : TopMost {
         options: TopMostOptions,
         parentInitialize: (() -> Long?)?
     ) {
-        window.apply {
-            name = options.name
-            isAlwaysOnTop = options.topMost
-        }
-        this.options = options
-
-        setPlatformOptionsBeforeInit()
-
-        windowHandle = parentInitialize?.invoke()?.takeIf { it > 0L }
-            ?: run {
-                window.addNotify()
-
-                findPlatformWindowHandle(window)
+        EventQueue.invokeLater {
+            window.apply {
+                name = options.name
+                isAlwaysOnTop = options.topMost
             }
+            this.options = options
 
-        setPlatformOptionsInit()
+            setPlatformOptionsBeforeInit()
 
-        setPlatformOptionsAfterInit()
+            windowHandle = parentInitialize?.invoke()?.takeIf { it > 0L }
+                ?: run {
+                    window.addNotify()
+
+                    findPlatformWindowHandle(window)
+                }
+
+            setPlatformOptionsInit()
+
+            setPlatformOptionsAfterInit()
+        }
     }
 
     override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit) {
-        if (options == null) {
-            throw MissingInitializingOptionsException()
+        EventQueue.invokeLater {
+            if (options == null) {
+                throw MissingInitializingOptionsException()
+            }
+
+            setPlatformOptionsBeforeVisibility(visible)
+
+            parentSetVisible.invoke(visible)
+
+            setPlatformOptionsAfterVisibility(visible)
         }
-
-        setPlatformOptionsBeforeVisibility(visible)
-
-        parentSetVisible.invoke(visible)
-
-        setPlatformOptionsAfterVisibility(visible)
     }
 
     protected open fun findPlatformWindowHandle(window: Window): Long? {
