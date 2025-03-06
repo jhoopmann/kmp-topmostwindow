@@ -5,19 +5,15 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 
 actual open class TopMostImpl : TopMost, TopMostBase() {
     override fun setPlatformOptionsInit() {
-
     }
 
     override fun setPlatformOptionsAfterInit() {
-
     }
 
     override fun setPlatformOptionsBeforeInit() {
-
     }
 
     override fun setPlatformOptionsBeforeVisibility(visible: Boolean) {
-
     }
 
     override fun setPlatformOptionsAfterVisibility(visible: Boolean) {

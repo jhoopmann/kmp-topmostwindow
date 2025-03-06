@@ -8,19 +8,15 @@ actual open class TopMostImpl() : TopMost, TopMostBase() {
     }
 
     override fun setPlatformOptionsAfterInit() {
-
     }
 
     override fun setPlatformOptionsBeforeInit() {
-
     }
 
     override fun setPlatformOptionsBeforeVisibility(visible: Boolean) {
-
     }
 
     override fun setPlatformOptionsAfterVisibility(visible: Boolean) {
-
     }
 
     protected open fun setWindowsOptionsInit() {
