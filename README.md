@@ -26,7 +26,7 @@ This library provides an interface and implementation class with functionality t
 Tested with
 - JDK 21 / 23
 - Kotlin Multiplatform 2.1.10
-- macOS 15.3.1, Linux X11, Windows 10/11
+- macOS 15.3.1, Linux X11 Debian12+Gnome3, Windows 10/11
 
 #### Under the hood:
 
