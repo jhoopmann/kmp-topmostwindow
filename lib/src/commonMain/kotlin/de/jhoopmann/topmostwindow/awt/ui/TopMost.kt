@@ -22,8 +22,7 @@ interface TopMost {
     fun initialize(
         window: Window,
         options: TopMostOptions = TopMostOptions(),
-        parentInitialize: (() -> Long?)? = null,
-        initialized: ((Long?) -> Unit)? = null,
+        parentInitialize: (() -> Long?)? = null
     )
 
     fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)
@@ -33,8 +32,7 @@ expect open class TopMostImpl : TopMost {
     override fun initialize(
         window: Window,
         options: TopMostOptions,
-        parentInitialize: (() -> Long?)?,
-        initialized: ((Long?) -> Unit)?
+        parentInitialize: (() -> Long?)?
     )
 
     override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)

@@ -22,35 +22,9 @@ actual open class TopMostImpl : TopMost, TopMostBase() {
     }
 
     override fun setPlatformOptionsBeforeVisibility(visible: Boolean) {
-        setMacOsOptionsBeforeVisibility(visible)
     }
 
     override fun setPlatformOptionsAfterVisibility(visible: Boolean) {
-        setMacOsOptionsAfterVisibility()
-    }
-
-    protected open fun setMacOsOptionsBeforeVisibility(visible: Boolean) {
-        with(ApplicationHelper.instance) {
-            isActive().let { wasActive ->
-                if (visible && options!!.sticky &&
-                    macOSState.activationPolicy != NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory
-                ) {
-                    setActivationPolicy(NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory.value)
-                } else if (getActivationPolicy() != macOSState.activationPolicy.value) {
-                    setActivationPolicy(macOSState.activationPolicy.value)
-                }
-
-                if (wasActive) {
-                    activate()
-                } else {
-                    deactivate()
-                }
-            }
-        }
-    }
-
-    protected open fun setMacOsOptionsAfterVisibility() {
-        setMacOsOptionsBeforeVisibility(false)
     }
 
     protected open fun setMacOsOptionsBeforeInit() {
@@ -96,6 +70,6 @@ actual open class TopMostImpl : TopMost, TopMostBase() {
 
     protected data class MacOSState(
         var activationPolicy: NSApplicationActivationPolicy =
-            NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular,
+            NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular
     )
 }

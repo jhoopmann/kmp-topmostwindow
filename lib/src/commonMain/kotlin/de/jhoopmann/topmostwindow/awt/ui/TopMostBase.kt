@@ -4,7 +4,7 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 import java.awt.EventQueue
 import java.awt.Window
 
-abstract class TopMostBase: TopMost {
+abstract class TopMostBase : TopMost {
     protected open var options: TopMostOptions? = null
     protected open var windowHandle: Long? = null
 
@@ -21,36 +21,26 @@ abstract class TopMostBase: TopMost {
     override fun initialize(
         window: Window,
         options: TopMostOptions,
-        parentInitialize: (() -> Long?)?,
-        initialized: ((Long?) -> Unit)?,
+        parentInitialize: (() -> Long?)?
     ) {
         window.apply {
             name = options.name
             isAlwaysOnTop = options.topMost
         }
-
         this.options = options
 
-        EventQueue.invokeLater {
-            setPlatformOptionsBeforeInit()
-        }
+        setPlatformOptionsBeforeInit()
 
-        EventQueue.invokeLater {
-            windowHandle = parentInitialize?.invoke()?.takeIf { it > 0L }
-                ?: run {
-                    window.addNotify()
+        windowHandle = parentInitialize?.invoke()?.takeIf { it > 0L }
+            ?: run {
+                window.addNotify()
 
-                    findPlatformWindowHandle(window)
-                }
+                findPlatformWindowHandle(window)
+            }
 
-            setPlatformOptionsInit()
-        }
+        setPlatformOptionsInit()
 
-        EventQueue.invokeLater {
-            setPlatformOptionsAfterInit()
-
-            initialized?.invoke(windowHandle)
-        }
+        setPlatformOptionsAfterInit()
     }
 
     override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit) {
@@ -58,17 +48,11 @@ abstract class TopMostBase: TopMost {
             throw MissingInitializingOptionsException()
         }
 
-        EventQueue.invokeLater {
-            setPlatformOptionsBeforeVisibility(visible)
-        }
+        setPlatformOptionsBeforeVisibility(visible)
 
-        EventQueue.invokeLater {
-            parentSetVisible.invoke(visible)
-        }
+        parentSetVisible.invoke(visible)
 
-        EventQueue.invokeLater {
-            setPlatformOptionsAfterVisibility(visible)
-        }
+        setPlatformOptionsAfterVisibility(visible)
     }
 
     protected open fun findPlatformWindowHandle(window: Window): Long? {
