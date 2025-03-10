@@ -28,8 +28,21 @@ interface TopMost {
         window: Window,
         options: TopMostOptions = TopMostOptions(),
         parentInitialize: (() -> Long?)? = null,
-        onInitialized: (() -> Unit)? = null
+        beforeInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)? = { topMost, companion, options ->
+            defaultBeforeInitialization(companion, options)
+        },
+        afterInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)? = { topMost, companion, options ->
+            defaultAfterInitialization(companion, options)
+        }
     )
 
     fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)
+}
+
+fun defaultBeforeInitialization(companion: TopMostCompanion, options: TopMostOptions) {
+    companion.setPlatformOptionsBeforeInit(options)
+}
+
+fun defaultAfterInitialization(companion: TopMostCompanion, options: TopMostOptions) {
+    companion.setPlatformOptionsAfterInit(options)
 }

@@ -4,6 +4,8 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 import java.awt.EventQueue
 import java.awt.Window
 
+
+
 open class TopMostCompanionBase: TopMostCompanion {
     override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {
     }
@@ -30,9 +32,12 @@ open class TopMostBase : TopMost {
         window: Window,
         options: TopMostOptions,
         parentInitialize: (() -> Long?)?,
-        onInitialized: (() -> Unit)?
+        beforeInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?,
+        afterInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?
     ) {
         EventQueue.invokeLater {
+            beforeInitialization?.invoke(this, TopMostImpl, options)
+
             window.apply {
                 name = options.name
                 isAlwaysOnTop = options.topMost
@@ -52,7 +57,7 @@ open class TopMostBase : TopMost {
 
             setWindowOptionsAfterInit()
 
-            onInitialized?.invoke()
+            afterInitialization?.invoke(this, TopMostImpl, options)
         }
     }
 
