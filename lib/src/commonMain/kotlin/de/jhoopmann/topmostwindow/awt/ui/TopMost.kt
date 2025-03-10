@@ -18,22 +18,18 @@ data class TopMostOptions(
     val skipTaskbar: Boolean = true,
 )
 
+interface TopMostCompanion {
+    fun setPlatformOptionsBeforeInit(options: TopMostOptions?)
+    fun setPlatformOptionsAfterInit(options: TopMostOptions?)
+}
+
 interface TopMost {
     fun initialize(
         window: Window,
         options: TopMostOptions = TopMostOptions(),
-        parentInitialize: (() -> Long?)? = null
+        parentInitialize: (() -> Long?)? = null,
+        onInitialized: (() -> Unit)? = null
     )
 
     fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)
-}
-
-expect open class TopMostImpl : TopMost {
-    override fun initialize(
-        window: Window,
-        options: TopMostOptions,
-        parentInitialize: (() -> Long?)?
-    )
-
-    override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)
 }

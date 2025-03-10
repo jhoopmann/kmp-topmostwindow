@@ -3,20 +3,12 @@ package de.jhoopmann.topmostwindow.awt.ui
 import de.jhoopmann.topmostwindow.awt.native.WMState
 import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 
+actual open class TopMostCompanionImpl: TopMostCompanion, TopMostCompanionBase()
+
 actual open class TopMostImpl : TopMost, TopMostBase() {
-    override fun setPlatformOptionsInit() {
-    }
+    actual companion object: TopMostCompanion, TopMostCompanionImpl()
 
-    override fun setPlatformOptionsAfterInit() {
-    }
-
-    override fun setPlatformOptionsBeforeInit() {
-    }
-
-    override fun setPlatformOptionsBeforeVisibility(visible: Boolean) {
-    }
-
-    override fun setPlatformOptionsAfterVisibility(visible: Boolean) {
+    override fun setWindowOptionsAfterVisibility(visible: Boolean) {
         setLinuxOptionsAfterVisibility(visible)
     }
 

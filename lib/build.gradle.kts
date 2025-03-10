@@ -94,6 +94,6 @@ tasks.named("${targetJvmPlatform}Jar", Jar::class.java) {
     dependsOn("copyNativeLibrary")
 
     from(project.layout.buildDirectory.dir("native")) {
-        into("native") // Die Dateien in den Jar-Task einfügen
+        into("native") // add native lib to jar/native
     }
 }

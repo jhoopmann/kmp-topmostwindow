@@ -4,24 +4,33 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 import java.awt.EventQueue
 import java.awt.Window
 
-abstract class TopMostBase : TopMost {
+open class TopMostCompanionBase: TopMostCompanion {
+    override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {
+    }
+
+    override fun setPlatformOptionsAfterInit(options: TopMostOptions?) {
+    }
+}
+
+open class TopMostBase : TopMost {
     protected open var options: TopMostOptions? = null
     protected open var windowHandle: Long? = null
 
-    abstract protected fun setPlatformOptionsBeforeVisibility(visible: Boolean)
+    protected open fun setWindowOptionsBeforeVisibility(visible: Boolean) {}
 
-    abstract protected fun setPlatformOptionsAfterVisibility(visible: Boolean)
+    protected open fun setWindowOptionsAfterVisibility(visible: Boolean) {}
 
-    abstract protected fun setPlatformOptionsInit()
+    protected open fun setWindowOptionsInit() {}
 
-    abstract protected fun setPlatformOptionsAfterInit()
+    protected open fun setWindowOptionsAfterInit() {}
 
-    abstract protected fun setPlatformOptionsBeforeInit()
+    protected open fun setWindowOptionsBeforeInit() {}
 
     override fun initialize(
         window: Window,
         options: TopMostOptions,
-        parentInitialize: (() -> Long?)?
+        parentInitialize: (() -> Long?)?,
+        onInitialized: (() -> Unit)?
     ) {
         EventQueue.invokeLater {
             window.apply {
@@ -30,18 +39,20 @@ abstract class TopMostBase : TopMost {
             }
             this.options = options
 
-            setPlatformOptionsBeforeInit()
+            setWindowOptionsBeforeInit()
 
             windowHandle = parentInitialize?.invoke()?.takeIf { it > 0L }
                 ?: run {
                     window.addNotify()
 
-                    findPlatformWindowHandle(window)
+                    findWindowHandle(window)
                 }
 
-            setPlatformOptionsInit()
+            setWindowOptionsInit()
 
-            setPlatformOptionsAfterInit()
+            setWindowOptionsAfterInit()
+
+            onInitialized?.invoke()
         }
     }
 
@@ -51,15 +62,15 @@ abstract class TopMostBase : TopMost {
                 throw MissingInitializingOptionsException()
             }
 
-            setPlatformOptionsBeforeVisibility(visible)
+            setWindowOptionsBeforeVisibility(visible)
 
             parentSetVisible.invoke(visible)
 
-            setPlatformOptionsAfterVisibility(visible)
+            setWindowOptionsAfterVisibility(visible)
         }
     }
 
-    protected open fun findPlatformWindowHandle(window: Window): Long? {
+    protected open fun findWindowHandle(window: Window): Long? {
         return with(WindowHelper.instance) {
             findWindowForComponent(window) // implemented on each platform
         }.takeIf { it > 0L } ?: run {

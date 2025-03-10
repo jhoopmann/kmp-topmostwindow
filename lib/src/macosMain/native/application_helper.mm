@@ -33,7 +33,9 @@ JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_ApplicationHel
 JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_ApplicationHelper_setActivationPolicy(JNIEnv* env, jobject obj, jint applicationActivationPolicy) {
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSApplicationActivationPolicy activationPolicy = static_cast<NSApplicationActivationPolicy>(applicationActivationPolicy);
-        if (![[NSApplication sharedApplication] setActivationPolicy: activationPolicy]) {
+        if (activationPolicy != [[NSApplication sharedApplication] activationPolicy] &&
+            ![[NSApplication sharedApplication] setActivationPolicy: activationPolicy]
+        ) {
             NSLog(@"Failed to set activation policy");
         }
     });
