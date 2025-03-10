@@ -30,11 +30,11 @@ open class TopMostBase : TopMost {
         window: Window,
         options: TopMostOptions,
         parentInitialize: (() -> Long?)?,
-        beforeInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?,
-        afterInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?
+        beforeInitialization: ((TopMost, TopMostOptions) -> Unit)?,
+        afterInitialization: ((TopMost, TopMostOptions) -> Unit)?
     ) {
         EventQueue.invokeLater {
-            beforeInitialization?.invoke(this, TopMostImpl, options)
+            beforeInitialization?.invoke(this, options)
 
             window.apply {
                 name = options.name
@@ -55,7 +55,7 @@ open class TopMostBase : TopMost {
 
             setWindowOptionsAfterInit()
 
-            afterInitialization?.invoke(this, TopMostImpl, options)
+            afterInitialization?.invoke(this, options)
         }
     }
 

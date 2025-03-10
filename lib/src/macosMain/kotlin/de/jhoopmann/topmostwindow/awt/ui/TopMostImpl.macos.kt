@@ -63,8 +63,8 @@ actual open class TopMostImpl : TopMost, TopMostBase() {
                     setWindowCollectionBehavior(
                         handle,
                         NSWindowCollectionBehavior.NSWindowCollectionBehaviorCanJoinAllSpaces.value or
-                                NSWindowCollectionBehavior.NSWindowCollectionBehaviorFullScreenAuxiliary.value or
-                                NSWindowCollectionBehavior.NSWindowCollectionBehaviorStationary.value
+                            NSWindowCollectionBehavior.NSWindowCollectionBehaviorFullScreenAuxiliary.value or
+                            NSWindowCollectionBehavior.NSWindowCollectionBehaviorStationary.value
                     )
                 }
             }

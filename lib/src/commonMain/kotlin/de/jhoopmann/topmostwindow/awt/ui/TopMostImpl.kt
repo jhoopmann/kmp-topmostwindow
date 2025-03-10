@@ -15,8 +15,8 @@ expect open class TopMostImpl : TopMost {
         window: Window,
         options: TopMostOptions,
         parentInitialize: (() -> Long?)?,
-        beforeInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?,
-        afterInitialization: ((TopMost, TopMostCompanion, TopMostOptions) -> Unit)?
+        beforeInitialization: ((TopMost, TopMostOptions) -> Unit)?,
+        afterInitialization: ((TopMost, TopMostOptions) -> Unit)?
     )
 
     override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)
