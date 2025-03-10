@@ -4,8 +4,6 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 import java.awt.EventQueue
 import java.awt.Window
 
-
-
 open class TopMostCompanionBase: TopMostCompanion {
     override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {
     }
