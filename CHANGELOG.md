@@ -11,7 +11,7 @@
 
 ## [1.2.0]
 ### Version notes
-Call update in setVisible of ComposeTopMostWindow, remove TopMostCompanion, refactor some methods
+remove TopMostCompanion, refactor some methods
 
 ### Added
 TopMost fun setPlatformOptionsBeforeInit(options: TopMostOptions?)
