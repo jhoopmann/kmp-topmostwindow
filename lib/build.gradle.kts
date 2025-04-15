@@ -6,11 +6,13 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 import buildtasks.*
-
 val targetJvmPlatform: String = project.findProperty("targetJvmPlatform")?.toString() ?: "macos"
+val supportedJavaVersion: String = if (JavaVersion.current().toString().toInt() <= "21".toInt()) {
+    JavaVersion.VERSION_17.toString()
+} else JavaVersion.current().toString()
 
 group = "de.jhoopmann.topmostwindow.awt"
-version = "1.1.0"
+version = "1.2.0"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -55,7 +57,7 @@ repositories {
 kotlin {
     jvm(targetJvmPlatform) {
         compilations.all {
-            kotlinOptions.jvmTarget = "21"
+            kotlinOptions.jvmTarget = supportedJavaVersion
         }
     }
 
@@ -82,7 +84,7 @@ kotlin {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(supportedJavaVersion.toInt())
     }
 }
 

@@ -25,8 +25,8 @@ This library provides an interface and implementation class with functionality t
 
 Tested with
 - JDK 21 / 23
-- Kotlin Multiplatform 2.1.10
-- macOS 15.3.1, Linux X11 Debian12+Gnome3, Windows 10/11
+- Kotlin Multiplatform 2.*.*-2.1.10
+- macOS 14.*.*-15.3.1, Linux X11 Debian12+Gnome3, Windows 10/11
 
 #### Under the hood:
 
@@ -40,12 +40,12 @@ This library makes use of various methods of the specific OS functionalities.
 
 Currently, applying options is only possible in initialization. If you need to change options, you have to recreate the native instance, so by design we provide the options in the initialize function. Maybe this is going to be changed if required but it's difficult for example in macOS because of restrictions by the NSWindow consistency rules.
 
-On macOS, if you set ```beforeInitialization``` and ```afterInitialization``` parameter values, you have to call the TopMostImpl Companion methods ```setPlatformOptionsBeforeInit``` and ```setPlatformOptionsAfterInit```manually to apply ```NSApplicationActivationPolicy```. This is required if you want to initialize multiple TopMostWindow at the same time because of the macOS Dock event processing (displays multiple application images if received in short sequence).
+On macOS, if you set ```beforeInitialization``` and ```afterInitialization``` parameter values, you have to call the TopMost methods ```setPlatformOptionsBeforeInit``` and ```setPlatformOptionsAfterInit```manually to apply ```NSApplicationActivationPolicy```. This is required if you want to initialize multiple TopMostWindow at the same time because of the macOS Dock event processing (displays multiple application images if received in short sequence).
 
 ## Usage as delegate
 
 ```
-class TestWindow : Window(null), TopMost by TopMostImpl() {
+class TopMostWindow : Window(null), TopMost by TopMostImpl() {
     init {
         /* initialize TopMost delegate */
         initialize(
@@ -55,30 +55,27 @@ class TestWindow : Window(null), TopMost by TopMostImpl() {
                 sticky = true,
                 skipTaskbar = true
             ),
-            { // nullable
-                /* Apply additional stuff after TopMost before initialization logic,
-                   create native handle and return it as Long */
-
-                /* If null, TopMost will call window.addNotify() to create native instance
-                   and tries to find the window handle */
-                null
+            { // nullable, default null
+                // apply options to be set between before and native initialization calls
+                // if function returns positive long value, it's used as windowHandle, otherwise
+                // window.addNotfiy() is called to create native window instance
             },
-            { // nullable
-                /* Applies platform before initialization logic by default */
+            { topMost, options -> // nullable, default DefaultBeforeInitalizationEvent
+                // apply options to be set before native window initialization
             },
-            { // nullable
-                /* Applies platform after initialization logic by default */
+            { topMost, options -> // nullable, default DefaultAfterInitializationEvent
+                // apply options to be set after native window initialization
             }
         )
     }
 
-    /* override awt Window setVisible */
+    // override awt window setVisible
     override fun setVisible(value: Boolean) {
-        /* call TopMost delegate setVisible */
-        setVisible(value) { /* internally calls TopMost logic before visibility invocation */
-            /* call awt Window setVisible */
+        // call TopMost delegate setVisible
+        setVisible(value) {
+            // call original awt window setVisible
             super.setVisible(value)
-        } /* internally calls TopMost logic after visibility invocation */
+        }
     }
 }
 ```

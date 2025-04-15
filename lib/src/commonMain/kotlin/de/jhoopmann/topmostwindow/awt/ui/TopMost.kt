@@ -10,7 +10,7 @@ interface TopMost {
     fun initialize(
         window: Window,
         options: TopMostOptions = TopMostOptions(),
-        parentInitialize: (() -> Long?)? = null,
+        parentInitialize: (() -> Long)? = null,
         beforeInitialization: InitializationEvent? = DefaultBeforeInitializationEvent,
         afterInitialization: InitializationEvent? = DefaultAfterInitializationEvent
     )

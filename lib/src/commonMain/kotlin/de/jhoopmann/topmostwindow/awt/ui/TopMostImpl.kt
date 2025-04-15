@@ -12,9 +12,9 @@ expect open class TopMostImpl : TopMost {
     override fun initialize(
         window: Window,
         options: TopMostOptions,
-        parentInitialize: (() -> Long?)?,
-        beforeInitialization: ((TopMost, TopMostOptions) -> Unit)?,
-        afterInitialization: ((TopMost, TopMostOptions) -> Unit)?
+        parentInitialize: (() -> Long)?,
+        beforeInitialization: InitializationEvent?,
+        afterInitialization: InitializationEvent?
     )
 
     override fun setVisible(visible: Boolean, parentSetVisible: (Boolean) -> Unit)

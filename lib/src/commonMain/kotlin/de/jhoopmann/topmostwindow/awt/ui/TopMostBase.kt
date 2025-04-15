@@ -25,7 +25,7 @@ open class TopMostBase : TopMost {
     override fun initialize(
         window: Window,
         options: TopMostOptions,
-        parentInitialize: (() -> Long?)?,
+        parentInitialize: (() -> Long)?,
         beforeInitialization: InitializationEvent?,
         afterInitialization: InitializationEvent?
     ) {
