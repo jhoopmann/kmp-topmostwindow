@@ -36,11 +36,8 @@ open class TopMostBase : TopMost {
         EventQueue.invokeLater {
             beforeInitialization?.invoke(this, options)
 
-            window.apply {
-                name = options.name
-                isAlwaysOnTop = options.topMost
-            }
             this.options = options
+            window.isAlwaysOnTop = options.topMost
 
             setWindowOptionsBeforeInit()
 

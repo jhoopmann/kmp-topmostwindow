@@ -11,7 +11,6 @@ import kotlin.random.nextUInt
  *  has no effect on windows because non toolbox window without parent always appear in taskbar, use sticky.
  */
 data class TopMostOptions(
-    val name: String = Random.nextUInt().toString(),
     val topMost: Boolean = true,
     val sticky: Boolean = true,
     val skipTaskbar: Boolean = true,

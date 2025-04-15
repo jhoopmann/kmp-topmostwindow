@@ -1,7 +1,6 @@
 package de.jhoopmann.topmostwindow.awt.ui
 
 import java.awt.Window
-import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.companionObjectInstance
 
 interface TopMostCompanion {
