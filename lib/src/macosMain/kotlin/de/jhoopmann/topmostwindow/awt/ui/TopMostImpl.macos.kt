@@ -1,12 +1,8 @@
 package de.jhoopmann.topmostwindow.awt.ui
 
-import de.jhoopmann.topmostwindow.awt.native.ApplicationHelper
-import de.jhoopmann.topmostwindow.awt.native.WindowHelper
-import de.jhoopmann.topmostwindow.awt.native.CGWindowLevelKey
-import de.jhoopmann.topmostwindow.awt.native.NSApplicationActivationPolicy
-import de.jhoopmann.topmostwindow.awt.native.NSWindowCollectionBehavior
+import de.jhoopmann.topmostwindow.awt.native.*
 
-actual open class TopMostCompanionImpl : TopMostCompanion, TopMostCompanionBase() {
+actual open class TopMostImpl : TopMost, TopMostBase() {
     protected open val macOSState: MacOSState = MacOSState()
 
     actual override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {
@@ -16,34 +12,6 @@ actual open class TopMostCompanionImpl : TopMostCompanion, TopMostCompanionBase(
     actual override fun setPlatformOptionsAfterInit(options: TopMostOptions?) {
         setMacOsOptionsAfterInit(options!!)
     }
-
-    protected fun setMacOsOptionsBeforeInit(options: TopMostOptions) {
-        with(ApplicationHelper.instance) {
-            macOSState.activationPolicy = NSApplicationActivationPolicy.fromValue(getActivationPolicy())
-                ?: NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular
-
-            if (options.sticky && macOSState.activationPolicy != NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory) {
-                setActivationPolicy(NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory.value)
-            }
-        }
-    }
-
-    protected fun setMacOsOptionsAfterInit(options: TopMostOptions) {
-        with(ApplicationHelper.instance) {
-            if (options.sticky && getActivationPolicy() != macOSState.activationPolicy.value) {
-                setActivationPolicy(macOSState.activationPolicy.value)
-            }
-        }
-    }
-
-    protected data class MacOSState(
-        var activationPolicy: NSApplicationActivationPolicy =
-            NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular
-    )
-}
-
-actual open class TopMostImpl : TopMost, TopMostBase() {
-    actual companion object : TopMostCompanion, TopMostCompanionImpl()
 
     override fun setWindowOptionsInit() {
         setMacOsOptionsInit()
@@ -70,4 +38,28 @@ actual open class TopMostImpl : TopMost, TopMostBase() {
             }
         }
     }
+
+    protected fun setMacOsOptionsBeforeInit(options: TopMostOptions) {
+        with(ApplicationHelper.instance) {
+            macOSState.activationPolicy = NSApplicationActivationPolicy.fromValue(getActivationPolicy())
+                ?: NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular
+
+            if (options.sticky && macOSState.activationPolicy != NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory) {
+                setActivationPolicy(NSApplicationActivationPolicy.NSApplicationActivationPolicyAccessory.value)
+            }
+        }
+    }
+
+    protected fun setMacOsOptionsAfterInit(options: TopMostOptions) {
+        with(ApplicationHelper.instance) {
+            if (options.sticky && getActivationPolicy() != macOSState.activationPolicy.value) {
+                setActivationPolicy(macOSState.activationPolicy.value)
+            }
+        }
+    }
+
+    protected data class MacOSState(
+        var activationPolicy: NSApplicationActivationPolicy =
+            NSApplicationActivationPolicy.NSApplicationActivationPolicyRegular
+    )
 }

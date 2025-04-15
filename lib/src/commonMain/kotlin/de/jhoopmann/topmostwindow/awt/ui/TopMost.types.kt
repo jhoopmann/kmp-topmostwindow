@@ -1,8 +1,5 @@
 package de.jhoopmann.topmostwindow.awt.ui
 
-import kotlin.random.Random
-import kotlin.random.nextUInt
-
 /**
  * topMost (Natively sets Window above all other Windows)
  * sticky (Natively sets Window to appear on all Spaces)
@@ -15,3 +12,5 @@ data class TopMostOptions(
     val sticky: Boolean = true,
     val skipTaskbar: Boolean = true,
 )
+
+typealias InitializationEvent = (TopMost, TopMostOptions) -> Unit

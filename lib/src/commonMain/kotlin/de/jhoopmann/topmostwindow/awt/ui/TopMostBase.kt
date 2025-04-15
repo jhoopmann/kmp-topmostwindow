@@ -4,14 +4,6 @@ import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 import java.awt.EventQueue
 import java.awt.Window
 
-open class TopMostCompanionBase: TopMostCompanion {
-    override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {
-    }
-
-    override fun setPlatformOptionsAfterInit(options: TopMostOptions?) {
-    }
-}
-
 open class TopMostBase : TopMost {
     protected open var options: TopMostOptions? = null
     protected open var windowHandle: Long? = null
@@ -26,12 +18,16 @@ open class TopMostBase : TopMost {
 
     protected open fun setWindowOptionsBeforeInit() {}
 
+    override fun setPlatformOptionsAfterInit(options: TopMostOptions?) {}
+
+    override fun setPlatformOptionsBeforeInit(options: TopMostOptions?) {}
+
     override fun initialize(
         window: Window,
         options: TopMostOptions,
         parentInitialize: (() -> Long?)?,
-        beforeInitialization: ((TopMost, TopMostOptions) -> Unit)?,
-        afterInitialization: ((TopMost, TopMostOptions) -> Unit)?
+        beforeInitialization: InitializationEvent?,
+        afterInitialization: InitializationEvent?
     ) {
         EventQueue.invokeLater {
             beforeInitialization?.invoke(this, options)

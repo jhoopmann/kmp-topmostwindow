@@ -1,5 +1,7 @@
 package de.jhoopmann.topmostwindow.awt.native
 
+private val LibraryPath: String = "libapplication_helper.dylib"
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class ApplicationHelper {
     actual companion object {
@@ -7,7 +9,7 @@ actual class ApplicationHelper {
     }
 
     init {
-        System.load(NativeLibraryResolver("libapplication_helper.dylib").path)
+        System.load(NativeLibraryResolver(LibraryPath).path)
     }
 
     actual external fun isActive(): Boolean

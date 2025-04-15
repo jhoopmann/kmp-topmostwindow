@@ -2,14 +2,12 @@ package de.jhoopmann.topmostwindow.awt.ui
 
 import java.awt.Window
 
-expect open class TopMostCompanionImpl : TopMostCompanion {
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+expect open class TopMostImpl : TopMost {
+
     override fun setPlatformOptionsBeforeInit(options: TopMostOptions?)
 
     override fun setPlatformOptionsAfterInit(options: TopMostOptions?)
-}
-
-expect open class TopMostImpl : TopMost {
-    companion object : TopMostCompanion
 
     override fun initialize(
         window: Window,

@@ -2,6 +2,8 @@ package de.jhoopmann.topmostwindow.awt.native
 
 import java.awt.Component
 
+private val LibraryPath: String = "libwindow_helper.dylib"
+
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class WindowHelper {
     actual companion object {
@@ -9,7 +11,7 @@ actual class WindowHelper {
     }
 
     init {
-        System.load(NativeLibraryResolver("libwindow_helper.dylib").path)
+        System.load(NativeLibraryResolver(LibraryPath).path)
     }
 
     actual external fun findWindowForComponent(component: Component): Long
