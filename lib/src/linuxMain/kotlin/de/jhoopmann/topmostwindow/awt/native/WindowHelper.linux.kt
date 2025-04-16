@@ -2,7 +2,7 @@ package de.jhoopmann.topmostwindow.awt.native
 
 import java.awt.Component
 
-private val LibraryPath: String = "window_helper.so"
+private val LibraryPath: String = "libwindow_helper.so"
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class WindowHelper {
