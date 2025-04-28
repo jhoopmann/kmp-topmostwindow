@@ -2,6 +2,7 @@ package de.jhoopmann.topmostwindow.awt.ui
 
 import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual open class TopMostImpl() : TopMost, TopMostBase() {
     actual override fun setWindowOptionsAfterInit() {
         with(WindowHelper.instance) {

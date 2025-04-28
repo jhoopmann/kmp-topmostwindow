@@ -58,7 +58,7 @@ abstract class TopMostBase : TopMost {
             ?: throw WindowHandleException(window)
     }
 
-    protected open fun setWindowOptionsBeforeVisibility(visible: Boolean) {}
+    override fun setWindowOptionsBeforeVisibility(visible: Boolean) {}
 
-    protected open fun setWindowOptionsAfterVisibility(visible: Boolean) {}
+    override fun setWindowOptionsAfterVisibility(visible: Boolean) {}
 }

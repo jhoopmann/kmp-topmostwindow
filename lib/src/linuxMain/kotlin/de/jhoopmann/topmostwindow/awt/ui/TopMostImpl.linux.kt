@@ -3,8 +3,9 @@ package de.jhoopmann.topmostwindow.awt.ui
 import de.jhoopmann.topmostwindow.awt.native.WMState
 import de.jhoopmann.topmostwindow.awt.native.WindowHelper
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual open class TopMostImpl : TopMost, TopMostBase() {
-    override fun setWindowOptionsAfterVisibility(visible: Boolean) {
+    actual override fun setWindowOptionsAfterVisibility(visible: Boolean) {
         val states: MutableList<WMState> = mutableListOf()
         if (options.skipTaskbar) {
             states.add(WMState.SKIP_TASKBAR)

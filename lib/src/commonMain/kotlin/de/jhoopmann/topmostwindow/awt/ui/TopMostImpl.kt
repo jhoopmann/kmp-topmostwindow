@@ -23,4 +23,8 @@ expect class TopMostImpl : TopMost {
     override fun setWindowOptionsAfterInit()
 
     override fun findWindowHandle(window: Window): Long
+
+    override fun setWindowOptionsBeforeVisibility(visible: Boolean)
+
+    override fun setWindowOptionsAfterVisibility(visible: Boolean)
 }

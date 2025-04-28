@@ -21,5 +21,9 @@ interface TopMost {
 
     fun setWindowOptionsAfterInit()
 
+    fun setWindowOptionsBeforeVisibility(visible: Boolean)
+
+    fun setWindowOptionsAfterVisibility(visible: Boolean)
+
     fun findWindowHandle(window: Window): Long
 }
