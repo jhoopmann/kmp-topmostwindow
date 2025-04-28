@@ -1,0 +1,17 @@
+package de.jhoopmann.topmostwindow.awt.ui
+
+import de.jhoopmann.topmostwindow.awt.native.WindowHelper
+
+actual open class TopMostImpl() : TopMost, TopMostBase() {
+    actual override fun setWindowOptionsAfterInit() {
+        with(WindowHelper.instance) {
+            if (options.topMost) {
+                setWindowTopMost(windowHandle)
+            }
+
+            if (options.sticky) {
+                setWindowSticky(windowHandle)
+            }
+        }
+    }
+}
