@@ -53,13 +53,13 @@ extern "C" {
         return JNI_VERSION_1_6;
     }
 
-    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+    JNIEXPORT jlong JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
         HWND windowHandle = findComponentWindow(env, component);
 
         return reinterpret_cast<jlong>(windowHandle);
     }
 
-    JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_setWindowSticky(JNIEnv *env, jobject obj, jlong windowHandle) {
+    JNIEXPORT void JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_setWindowSticky(JNIEnv *env, jobject obj, jlong windowHandle) {
         HWND window = reinterpret_cast<HWND>(windowHandle);
 
         if (!setWindowStickyOptions(window)) {
@@ -67,7 +67,7 @@ extern "C" {
         }
     }
 
-    JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_setWindowTopMost(JNIEnv *env, jobject obj, jlong windowHandle) {
+    JNIEXPORT void JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_setWindowTopMost(JNIEnv *env, jobject obj, jlong windowHandle) {
         HWND window = reinterpret_cast<HWND>(windowHandle);
 
         if(!setWindowTopMostOptions(window)) {

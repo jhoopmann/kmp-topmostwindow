@@ -158,13 +158,13 @@ extern "C" {
     }
 
 
-    JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+    JNIEXPORT jlong JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
         Window window = getComponentWindow(env, component);
 
         return static_cast<jlong>(window);
     }
 
-    JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_addWindowMode(JNIEnv *env, jobject obj, jlong windowHandle, jobjectArray windowModes) {
+    JNIEXPORT void JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_addWindowMode(JNIEnv *env, jobject obj, jlong windowHandle, jobjectArray windowModes) {
         Display* display = openDisplay();
         if (display == nullptr) {
             return;

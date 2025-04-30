@@ -10,7 +10,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 
-JNIEXPORT bool JNICALL Java_de_jhoopmann_topmostwindow_awt_native_ApplicationHelper_setActivationPolicy(JNIEnv* env, jobject obj, jint applicationActivationPolicy) {
+JNIEXPORT bool JNICALL Java_de_jhoopmann_stickywindow_awt_native_ApplicationHelper_setActivationPolicy(JNIEnv* env, jobject obj, jint applicationActivationPolicy) {
     __block bool result = true;
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSApplicationActivationPolicy activationPolicy = static_cast<NSApplicationActivationPolicy>(applicationActivationPolicy);
@@ -21,7 +21,7 @@ JNIEXPORT bool JNICALL Java_de_jhoopmann_topmostwindow_awt_native_ApplicationHel
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_de_jhoopmann_topmostwindow_awt_native_ApplicationHelper_getActivationPolicy(JNIEnv* env, jobject obj) {
+JNIEXPORT jint JNICALL Java_de_jhoopmann_stickywindow_awt_native_ApplicationHelper_getActivationPolicy(JNIEnv* env, jobject obj) {
     __block int result = NSApplicationActivationPolicyRegular;
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         result = [[NSApplication sharedApplication] activationPolicy];

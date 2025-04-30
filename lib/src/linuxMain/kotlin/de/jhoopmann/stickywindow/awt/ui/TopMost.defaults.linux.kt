@@ -1,0 +1,7 @@
+package de.jhoopmann.stickywindow.awt.ui
+
+actual val DefaultPlatformInitializeParent: InitializeParentFunction = DefaultInitializeParent
+
+actual val DefaultPlatformBeforeInitialization: InitializationEvent = DefaultBeforeInitialization
+
+actual val DefaultPlatformAfterInitialization: InitializationEvent = DefaultAfterInitialization

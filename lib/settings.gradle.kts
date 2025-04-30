@@ -1,1 +1,1 @@
-rootProject.name = "kmp-topmostwindow"
+rootProject.name = "kmp-stickywindow"

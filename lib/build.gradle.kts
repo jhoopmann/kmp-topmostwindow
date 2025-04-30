@@ -12,7 +12,7 @@ val supportedJavaVersion: String = if (JavaVersion.current().toString().toInt() 
     JavaVersion.VERSION_17.toString()
 } else JavaVersion.current().toString()
 
-group = "de.jhoopmann.topmostwindow.awt"
+group = "de.jhoopmann.stickywindow.awt"
 version = "1.2.0"
 
 plugins {
@@ -24,7 +24,7 @@ publishing {
     repositories {
         maven {
             name = "Github"
-            url = uri("https://maven.pkg.github.com/jhoopmann/kmp-topmostwindow")
+            url = uri("https://maven.pkg.github.com/jhoopmann/kmp-stickywindow")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -34,8 +34,8 @@ publishing {
 
     publications {
         create<MavenPublication>("targetJvmPlatform") {
-            groupId = "de.jhoopmann.topmostwindow.awt"
-            artifactId = "kmp-topmostwindow-$targetJvmPlatform"
+            groupId = "de.jhoopmann.stickywindow.awt"
+            artifactId = "kmp-stickywindow-$targetJvmPlatform"
             version = project.version.toString()
 
             afterEvaluate {

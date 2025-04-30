@@ -54,13 +54,13 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_6;
 }
 
-JNIEXPORT jlong JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
+JNIEXPORT jlong JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_findWindowForComponent(JNIEnv *env, jobject obj, jobject component) {
     NSWindow* window = getComponentWindow(env, component);
 
     return reinterpret_cast<jlong>(window);
 }
 
-JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_setWindowLevel(JNIEnv *env, jobject obj, jlong windowHandle, jint windowLevel) {
+JNIEXPORT void JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_setWindowLevel(JNIEnv *env, jobject obj, jlong windowHandle, jint windowLevel) {
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSWindowLevel level = static_cast<NSWindowLevel>(windowLevel);
         NSWindow* window = (NSWindow*) windowHandle;
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_s
     });
 }
 
-JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_setWindowCollectionBehavior(JNIEnv *env, jobject obj, jlong windowHandle, jint windowCollectionBehavior) {
+JNIEXPORT void JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_setWindowCollectionBehavior(JNIEnv *env, jobject obj, jlong windowHandle, jint windowCollectionBehavior) {
     dispatch_async_and_wait(dispatch_get_main_queue(), ^{
         NSWindowCollectionBehavior collectionBehavior = static_cast<NSWindowLevel>(windowCollectionBehavior);
         NSWindow* window = (NSWindow*) windowHandle;
@@ -78,7 +78,7 @@ JNIEXPORT void JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_s
     });
 }
 
-JNIEXPORT jint JNICALL Java_de_jhoopmann_topmostwindow_awt_native_WindowHelper_getCGWindowLevelForKey(JNIEnv *env, jobject obj, jint cGWindowLevelKey) {
+JNIEXPORT jint JNICALL Java_de_jhoopmann_stickywindow_awt_native_WindowHelper_getCGWindowLevelForKey(JNIEnv *env, jobject obj, jint cGWindowLevelKey) {
     return static_cast<jint>(CGWindowLevelForKey(static_cast<CGWindowLevelKey>(cGWindowLevelKey)));
 }
 }
