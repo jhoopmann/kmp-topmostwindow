@@ -13,7 +13,7 @@ val DefaultBeforeInitialization: InitializationEvent = {
 }
 
 val DefaultAfterInitialization: InitializationEvent = {
-    setWindowOptionsBeforeInit()
+    setWindowOptionsAfterInit()
 }
 
 expect val DefaultPlatformInitializeParent: InitializeParentFunction
